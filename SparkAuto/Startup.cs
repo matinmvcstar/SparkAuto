@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SparkAuto.Data;
+using SparkAuto.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,11 +41,24 @@ namespace SparkAuto
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+               options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+               options.Lockout.MaxFailedAccessAttempts = 5;
+               options.Lockout.AllowedForNewUsers = true;
+               options.SignIn.RequireConfirmedAccount = true;
+           })
+                .AddDefaultTokenProviders()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages().AddRazorRuntimeCompilation();
 
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.Configure<EmailSetting>(Configuration.GetSection("EmailSetting"));
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddSingleton<IEmailSender, AuthMessageSender>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllersWithViews();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +87,6 @@ namespace SparkAuto
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
             });
         }
     }
