@@ -84,7 +84,7 @@ namespace SparkAuto.Users
 
             ////جستجو جدول
             
-            var count = (double)UserListVM.ApplicationUserList.Count / 10;
+            var count = (double)UserListVM.ApplicationUserList.Count / SD.PageinationUsersPageSize;
             var countup = Math.Ceiling(count);
 
             UserListVM.PagingInfo = new PagingInfo

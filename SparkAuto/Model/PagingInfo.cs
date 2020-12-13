@@ -13,7 +13,7 @@ namespace SparkAuto.Model
 
         public int CurrentPage { get; set; }
 
-        public int TotalPage => (int)Math.Ceiling((decimal)TotalItems / ItemsPerPage);
+        public int TotalPage => (int)Math.Ceiling((double)TotalItems / ItemsPerPage);
 
         public string UrlParam { get; set; }
     }
