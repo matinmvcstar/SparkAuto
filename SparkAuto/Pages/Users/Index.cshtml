@@ -75,12 +75,21 @@
                       }
                       <tr>
                           <td colspan="5" class="text-center">
+                              <button id="perv" name="perv" value="perv" class="btn btn-info">
+                                  صفحه اول
+                              </button>
+                              <button id="perv" name="perv" value="perv" class="btn btn-info">
+                                  <<
+                              </button>
                               <div page-model="@Model.UserListVM.PagingInfo" asp-page="Index"
                                    page-class="btn border" page-class-normal="btn btn-light"
                                    page-class-selected="btn btn-info active" class="btn-group">
                               </div>
                               <button id="perv" name="perv" value="perv" class="btn btn-info">
-                                  صفحه قبل
+                                  >>
+                              </button>
+                              <button id="perv" name="perv" value="perv" class="btn btn-info">
+                                  صفحه آخر
                               </button>
                           </td>
                       </tr>
