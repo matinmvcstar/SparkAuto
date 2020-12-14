@@ -1,5 +1,6 @@
 ﻿@page
 @model RegisterModel
+@using SparkAuto.Utility
 @{
     ViewData["Title"] = "Register";
 }
@@ -32,6 +33,13 @@
                 <input asp-for="Input.BirthDate" class="form-control" />
                 <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
             </div>
+            @if (User.IsInRole(SD.AdminEndUser))
+            {
+            <div class="form-group">
+                <label asp-for="Input.IsAdmin"></label>
+                <input type="checkbox" asp-for="Input.IsAdmin" class="form-control" />
+            </div>
+            }
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>

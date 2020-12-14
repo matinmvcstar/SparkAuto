@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SparkAuto.Data;
 
 namespace SparkAuto.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201214091405_AddCarTable")]
+    partial class AddCarTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,85 +285,6 @@ namespace SparkAuto.Data.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("SparkAuto.Model.ServiceHeader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Miles")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardId");
-
-                    b.ToTable("ServiceHeaders");
-                });
-
-            modelBuilder.Entity("SparkAuto.Model.ServiceShoppingCart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardId");
-
-                    b.HasIndex("ServiceTypeId");
-
-                    b.ToTable("serviceShoppingCarts");
-                });
-
-            modelBuilder.Entity("SparkAuto.Model.ServiseDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("ServiceHeaderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ServiceName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServicePrice")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ServiceTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceHeaderId");
-
-                    b.HasIndex("ServiceTypeId");
-
-                    b.ToTable("ServiseDetails");
-                });
-
             modelBuilder.Entity("SparkAuto.Data.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -448,55 +371,6 @@ namespace SparkAuto.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("SparkAuto.Model.ServiceHeader", b =>
-                {
-                    b.HasOne("SparkAuto.Model.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
-                });
-
-            modelBuilder.Entity("SparkAuto.Model.ServiceShoppingCart", b =>
-                {
-                    b.HasOne("SparkAuto.Model.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SparkAuto.Data.ServiceType", "ServiceType")
-                        .WithMany()
-                        .HasForeignKey("ServiceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
-
-                    b.Navigation("ServiceType");
-                });
-
-            modelBuilder.Entity("SparkAuto.Model.ServiseDetails", b =>
-                {
-                    b.HasOne("SparkAuto.Model.ServiceHeader", "ServiceHeader")
-                        .WithMany()
-                        .HasForeignKey("ServiceHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SparkAuto.Data.ServiceType", "ServiceType")
-                        .WithMany()
-                        .HasForeignKey("ServiceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ServiceHeader");
-
-                    b.Navigation("ServiceType");
                 });
 #pragma warning restore 612, 618
         }

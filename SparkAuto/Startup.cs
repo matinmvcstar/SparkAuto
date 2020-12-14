@@ -52,6 +52,16 @@ namespace SparkAuto
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            /*services.AddAuthentication().AddGoogle(Gp =>
+            {
+                Gp.ClientId = "";
+                Gp.ClientSecret = "";
+            }).AddMicrosoftAccount(MA =>
+            {
+                MA.ClientId = "";
+                MA.ClientSecret = "";
+            });*/
+
             services.Configure<EmailSetting>(Configuration.GetSection("EmailSetting"));
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddSingleton<IEmailSender, AuthMessageSender>();

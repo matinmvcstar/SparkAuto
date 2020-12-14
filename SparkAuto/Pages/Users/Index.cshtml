@@ -3,97 +3,104 @@
 @{
 }
 
-<br /><br />
+<br />
+<br />
+<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
 
-      <form method="get" asp-page="Index">
-          <br /><br />
-          <div class="border bg-white">
-              <br />
+<form method="get" asp-page="Index">
+    <br /><br />
+    <div class="border bg-white">
+        <br />
 
-              <div style="height:60px;" class="container border border-secondary">
-                  <div class="row">
-                      <div class="col-11">
-                          <div class="row" style="padding-top:10px">
-                              <div class="col-4">
-                                  @Html.Editor("searchEmail", new { htmlAttributes = new { @class = "form-control", placeholder = "ایمیل" } })
-                              </div>
-                              <div class="col-4">
-                                  @Html.Editor("searchName", new { htmlAttributes = new { @class = "form-control", placeholder = "نام کاربر" } })
-                              </div>
-                              <div class="col-4">
-                                  @Html.Editor("searchBirth", new { htmlAttributes = new { @class = "form-control", placeholder = "تاریخ تولد" } })
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-1">
-                          <div class="row" style="padding-top:10px; padding-right:10px;">
-                              <button type="submit" name="submit" value="Search" class="btn btn-info form-control">
-                                  <i class="fas fa-search"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+        <div style="height:60px;" class="container border border-secondary">
+            <div class="row">
+                <div class="col-11">
+                    <div class="row" style="padding-top:10px">
+                        <div class="col-4">
+                            @Html.Editor("searchEmail", new { htmlAttributes = new { @class = "form-control", placeholder = "ایمیل" } })
+                        </div>
+                        <div class="col-4">
+                            @Html.Editor("searchName", new { htmlAttributes = new { @class = "form-control", placeholder = "نام کاربر" } })
+                        </div>
+                        <div class="col-4">
+                            @Html.Editor("searchBirth", new { htmlAttributes = new { @class = "form-control", placeholder = "تاریخ تولد" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <div class="row" style="padding-top:10px; padding-right:10px;">
+                        <button type="submit" name="submit" value="Search" class="btn btn-info form-control">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-              <div>
-                  <table class="table table-striped border">
-                      <tr class="table-secondary">
-                          <th>
-                              <label>نام و نام خانوادگی</label>
-                          </th>
-                          <th>
-                              @Html.DisplayNameFor(m => m.UserListVM.ApplicationUserList[0].BirthDate)
-                          </th>
-                          <th>
-                              @Html.DisplayNameFor(m => m.UserListVM.ApplicationUserList[0].Email)
-                          </th>
-                          <th></th>
-                      </tr>
-                      @foreach(var item in Model.UserListVM.ApplicationUserList)
-                      {
-                          <tr>
-                              <td>
-                                  @Html.DisplayFor(m => item.FirstName)
-                              </td>
-                              <td>
-                                  @Html.DisplayFor(m => item.BirthDate)
-                              </td>
-                              <td>
-                                  @Html.DisplayFor(m => item.Email)
-                              </td>
-                              <td style="width:150px">
-                                  <div role="group">
-                                      <a class="btn btn-primary text-white" asp-page="Edit" asp-route-id="@item.Id">
-                                          <i class="fas fa-edit"></i>
-                                      </a>
-                                      <a class="btn btn-danger text-white" asp-page="Delete" asp-route-id="@item.Id">
-                                          <i class="fas fa-trash-alt"></i>
-                                      </a>
-                                  </div>
-                              </td>
-                          </tr>
-                      }
-                      <tr>
-                          <td colspan="5" class="text-center">
-                              <button id="perv" name="perv" value="perv" class="btn btn-info">
-                                  صفحه اول
-                              </button>
-                              <button id="perv" name="perv" value="perv" class="btn btn-info">
-                                  <<
-                              </button>
-                              <div page-model="@Model.UserListVM.PagingInfo" asp-page="Index"
-                                   page-class="btn border" page-class-normal="btn btn-light"
-                                   page-class-selected="btn btn-info active" class="btn-group">
-                              </div>
-                              <button id="perv" name="perv" value="perv" class="btn btn-info">
-                                  >>
-                              </button>
-                              <button id="perv" name="perv" value="perv" class="btn btn-info">
-                                  صفحه آخر
-                              </button>
-                          </td>
-                      </tr>
-                  </table>
-              </div>
-          </div>
-      </form>
+        <div>
+            <table class="table table-striped border">
+                <tr class="table-secondary">
+                    <th>
+                        <label>نام و نام خانوادگی</label>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.UserListVM.ApplicationUserList[0].BirthDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.UserListVM.ApplicationUserList[0].Email)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.UserListVM.ApplicationUserList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.BirthDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Email)
+                        </td>
+                        <td>
+                            <a asp-page="../Cars/Index" asp-route-userId="@item.Id" style="text-decoration:none;">
+                                <img src="~/img/car.png" width="40"/> &nbsp; نمایش خودروها
+                            </a>
+                        </td>
+                        <td style="width:150px">
+                            <div role="group">
+                                <a class="btn btn-primary text-white" asp-page="Edit" asp-route-id="@item.Id">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-danger text-white" asp-page="Delete" asp-route-id="@item.Id">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <button id="perv" name="perv" value="perv" class="btn btn-info">
+                            صفحه اول
+                        </button>
+                        <button id="perv" name="perv" value="perv" class="btn btn-info">
+                            <<
+                        </button>
+                        <div page-model="@Model.UserListVM.PagingInfo" asp-page="Index"
+                             page-class="btn border" page-class-normal="btn btn-light"
+                             page-class-selected="btn btn-info active" class="btn-group">
+                        </div>
+                        <button id="perv" name="perv" value="perv" class="btn btn-info">
+                            >>
+                        </button>
+                        <button id="perv" name="perv" value="perv" class="btn btn-info">
+                            صفحه آخر
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

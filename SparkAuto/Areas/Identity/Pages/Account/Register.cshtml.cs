@@ -71,6 +71,8 @@ namespace SparkAuto.Areas.Identity.Pages.Account
 
             [DataType(DataType.Date)]
             public string BirthDate { get; set; }
+
+            public bool IsAdmin { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -108,26 +110,45 @@ namespace SparkAuto.Areas.Identity.Pages.Account
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser));
                     }
+
+                    if (Input.IsAdmin)
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
+                        _logger.LogInformation("User created a new account with password.");
+                        await _signInManager.SignInAsync(user, isPersistent: true);
+                        //var sd = _db.ApplicationUsers.Where(m => m.Email == Input.Email).SingleOrDefault();
+                        //sd.EmailConfirmed = true;
+                        user.EmailConfirmed = true;
+                        _db.SaveChanges();
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+
+                        _logger.LogInformation("User created a new account with password.");
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                    }
                     ///اضافه کردن ادمین
                     //await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
                     ///اضافه کردن مشتری
-                    await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+                    //await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
 
 
-                    _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    /*if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
@@ -135,7 +156,7 @@ namespace SparkAuto.Areas.Identity.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
-                    }
+                    }*/
                 }
                 foreach (var error in result.Errors)
                 {

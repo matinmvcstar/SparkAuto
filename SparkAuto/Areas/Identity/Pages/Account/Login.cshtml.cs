@@ -79,6 +79,15 @@ namespace SparkAuto.Areas.Identity.Pages.Account
         
             if (ModelState.IsValid)
             {
+
+                ////بررسی ارسال ایمیل تایید
+                var user = _userManager.Users.FirstOrDefault(u => u.Email == Input.Email);
+                if(user != null && !user.EmailConfirmed)
+                {
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                }
+                ////پایان
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
